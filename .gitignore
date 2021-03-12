@@ -1,0 +1,2 @@
+#ignore sql config
+Flask_Application/sql_config.py
