@@ -1,0 +1,123 @@
+  
+html,
+body,
+#mapid {
+  margin: auto;
+  width: 85%;
+  height: 75%;
+}
+body {
+  background-color: darkslateblue;
+}
+.center_map {
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  padding: 10px;
+}
+
+.center_button {
+  width: 100%;
+  height: 50%;
+  float: center;
+}
+
+.jumbotron {
+  width: 100%;
+  background-size: cover;
+  padding: 20px 
+}
+
+.float-left {
+  width: 30%;
+  height: 100%;
+  float: left;
+  /*float: bottom;*/
+  padding: 10px;
+}
+
+.float-right {
+  width: 60%;
+  float: left;
+  padding: 10px;
+} 
+
+.table_1 {
+  width: 55%;
+  display:block;
+  background-color: whitesmoke;
+}
+
+.table_2 {
+  width: 90%;
+  display:block;
+  background-color: whitesmoke;
+}
+thead {
+  display: inline-block;
+  width: 100%;
+  height: 20px;
+}
+tbody {
+  height: 200px;
+  display: inline-block;
+  width: 100%;
+  overflow: auto;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.text_black{
+  color: white;
+  text-shadow:
+  3px 3px 0 #000,
+-1px -1px 0 #000,  
+ 1px -1px 0 #000,
+ -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+.text_white{
+  color: black;
+  text-shadow:
+  3px 3px 0 white,
+-1px -1px 0 white,  
+ 1px -1px 0 white,
+ -1px 1px 0 white,
+  1px 1px 0 white;
+}
+
+
+
+.select_button{
+  text-shadow: none;
+}
+
+.loading-spinner{
+  width: 10rem;
+  height: 10rem;
+  display: inline-block;
+  border: 3px solid rgba(225, 225, 225, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  margin-bottom: 10rem;
+  animation: 1s spin infinite ease-in-out;
+
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tableauPlaceholder{
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  padding: 10px;
+}

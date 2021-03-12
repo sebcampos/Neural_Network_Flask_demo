@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- d3 library-->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+     <!-- Our CSS -->
+     <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+<script> 
+    let state = '{{ state_2 }}' ;
+    let selection = '{{ category_2 }}';
+    let star_choice = '{{ star_choice }}';  
+    let state_3 = "placeholder";
+    let selection_3 = "placeholder"
+</script>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <h1 class="text_white">Restaurants in US</h1>
+        <h2>Yelp Data</h2>
+        <p>The map below filters Yelp Restaurant dataset based on category and state.</p>
+        <hr>
+        <p>You can also create a new restaurant and have our machine learning model attempt to classify it by star, go ahead and try it out!</p>
+        <p>
+          <a class="btn btn-primary btn-lg text_black center_button" href="/tab_page" role="button">Tableau</a>
+        </p>
+    </div>
+    <form action='#' method="POST" style="float: left; width: 50%; height: 50%;">
+        <h2 class="text_black" >Map</h2>
+        <div class="form-group">
+        <label class="text_black" >Category</label>
+        <br></br>
+        <select  name="category" id="category" style="width:200px;" class="select_button">
+            <option value="{{ category_2 }}">{{ category_2 }}</option>
+            {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+        </div>
+        <div class="form-group">
+            <label class="text_black">State</label>
+            <br></br>
+            <select name="state" id="state" style="width:200px;">
+                <option value="{{ state_2 }}">{{ state_2 }}</option>
+                {% for state in states %}
+                <option value="{{ state }}">{{ state }}</option>
+                {% endfor %}
+            </select>    
+        </div>
+        <div class="form-group">
+            <label class="text_black">Star Rating</label>
+            <br></br>
+            <select name="star_rating" id="star_rating" style="width:200px;">
+                <option value="{{star_choice}}">{{ star_choice }}</option>
+                <option value="all">all</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+            </select>    
+        </div>
+        <div>
+            <button class="center btn btn-primary text_black" type="submit" value="Submit">Filter</button>
+        </div>
+    
+    </form>
+    <form action='/prediction' method="POST" style="float: left; width: 50%; height: 70%;">
+        <h2 class="text_black" >Predict</h2>
+        <div class="form-group">
+        <label class="text_black" >Category</label>
+        <br></br> 
+        <select  name="category_pred" id="category_pred" style="width:200px;" class="select_button">
+            <option id="category_pred" value="{{ selection_3 }}">{{ selection_3 }}</option> 
+            {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select> <button id="category_button_add" type="button"  onclick="add_category()" >+</button> <button id="category_button_subtract" type="button" >-</button>
+        </div>
+        <div class="form-group">
+            <label class="text_black">State</label>
+            <br></br>
+            <select name="state_pred"  id="state_pred" style="width:200px;"> 
+                <option value="{{ state_3 }}">{{ state_3 }}</option>
+                {% for state in states %}
+                <option value="{{ state }}">{{ state }}</option> 
+                {% endfor %}
+            </select><button id="state_button_add" type="button" onclick="add_state()" >+</button> <button id="state_button_subtract" type="button" >-</button>   
+        <div class="form-group">
+            <label class="text_black">Name</label>
+            <br></br>
+            <input type="text" id="category_typed" name="category_typed"> <button id="new_name" type="button" >+</button>
+            <input type="hidden" id="lat" name="lat" value=""></option> 
+            <input type="hidden" id="lng" name="lng" value=""></option> 
+            <input type="hidden" id="categories_lst" name="categories_lst" value=""></option>
+            <input type="hidden" id="states_lst" name="states_lst" value=""></option>  
+        </div>
+        </div>
+            <button class="center btn btn-primary text_black" type="submit" value="Predict">Predict</button>
+        </div>
+    </form>
+    <div id="loader" class="center_map loading-spinner" style="float:right;"></div>
+    <div id="mapid">
+    </div>
+    <div class="container">
+        <div id="table_1" class="float-left">
+            <table id="state_count" class="table_1">
+                <tr>
+                    <th class="text_white">State</th>
+                    <th class="text_white">Total Restaurants</th>
+                </tr>
+                {% for row in state_count.iterrows() %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1][0] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="float-right">
+            <table class="table_2">
+                <tr>
+                    <th class="text_white">Name</th>
+                    <th class="text_white">State</th>
+                    <th class="text_white">Star Rating</th>
+                    <th class="text_white">Number of Reviews</th>
+                    <th class="text_white">{{ category_2 }}</th>
+
+                </tr>
+                {% for row in df.iterrows() %}
+                    <tr>
+                        <td>{{ row[1][0] }}</td>
+                        <td>{{ row[1][1] }}</td>
+                        <td>{{ row[1][2] }}</td>
+                        <td>{{ row[1][3] }}</td>
+                        <td>{{ row[1][4] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+crossorigin=""></script>
+<!-- api key -->
+<script type="text/javascript" src="static/js/config.js"></script>
+<!-- script -->
+<script type="text/javascript" src="static/js/script.js"></script>
+
+</html>
