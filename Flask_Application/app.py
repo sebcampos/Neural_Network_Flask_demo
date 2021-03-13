@@ -157,7 +157,7 @@ def prediction():
         new_dict[i] = request.form[i].split(",")
 
     response = nueral_network_classifier(new_dict)
-    return "<h1>"+str(response)+" Stars</h1>"
+    return "<h1>"+str(response)+" Stars</h1><br></br><h2>" + str(new_dict["categories_lst"]) + "</h2>"
 @app.route("/tab_page")
 def page_2():
     return render_template("page_2.html")
